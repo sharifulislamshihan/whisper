@@ -65,9 +65,9 @@ export async function POST(request: Request) {
                 isAcceptingMessage: true,
                 messages: [],
             })
-
-
-            await newUser.save();
+            const savedUser = await newUser.save();
+            console.log("New saved user", savedUser);
+            
         }
 
         // sending Verification email
