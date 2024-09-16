@@ -52,15 +52,9 @@ export const authOptions: NextAuthOptions = {
     ],
 
     callbacks: {
-        async session({ session, token }) {
-            if (token) {
-                session.user._id = token._id
-                session.user.isVerified = token.isVerified
-                session.user.isAcceptingMessages = token.isAcceptingMessages
-                session.user.userName = token.userName
-            }
-            return session
-        },
+        /*
+        *take the user and put it into token by creating a object there
+        */
         async jwt({ token, user }) {
             if (user) {
                 token._id = user._id?.toString()
@@ -69,6 +63,21 @@ export const authOptions: NextAuthOptions = {
                     token.userName = user.userName
             }
             return token
+        },
+
+        /*
+        *stored data in token moved to session
+        *injected the object
+        * we can get the logged in user by using session
+        */
+        async session({ session, token }) {
+            if (token) {
+                session.user._id = token._id
+                session.user.isVerified = token.isVerified
+                session.user.isAcceptingMessages = token.isAcceptingMessages
+                session.user.userName = token.userName
+            }
+            return session
         },
     },
 
