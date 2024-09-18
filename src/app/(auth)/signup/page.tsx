@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useDebounceValue } from 'usehooks-ts'
+import { useDebounceCallback, useDebounceValue } from 'usehooks-ts'
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { signUpSchema } from "@/schemas/signUpSchema";
@@ -35,7 +35,7 @@ const SignUp = () => {
      * using debounce to check username availability
      * it improves performance by no checking it often but it delays when user stopped typing. which cause less request and improve the performance
      */
-    const debouncedUserName = useDebounceValue(userName, 300)
+    const debounced = useDebounceCallback(setUserName, 300)
 
     // zod implementation 
     const { register, handleSubmit } = useForm<z.infer<typeof signUpSchema>>({
@@ -49,13 +49,13 @@ const SignUp = () => {
 
     useEffect(() => {
         const checkUserNameIsUnique = async () => {
-            if (debouncedUserName) {
+            if (userName) {
                 setIsCheckingUserName(true)
                 setUserNameMessage('')
 
                 try {
                     // checking if the userName is unique or not
-                    const userNameResponse = await axios.get(`/api/checkUniqueUserName?userName=${debouncedUserName}`)
+                    const userNameResponse = await axios.get(`/api/checkUniqueUserName?userName=${userName}`)
                     // to store the msg that its unique or not
                     setUserNameMessage(userNameResponse.data.message)
                 } catch (error) {
@@ -70,7 +70,7 @@ const SignUp = () => {
             }
         }
         checkUserNameIsUnique();
-    }, [debouncedUserName])
+    }, [userName])
 
     const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
         setIsSubmitting(true)
@@ -104,7 +104,7 @@ const SignUp = () => {
         <div className="flex items-center justify-center h-screen">
             <Card className="w-[350px]">
                 <CardHeader>
-                    <CardTitle>Sign Up</CardTitle>
+                    <CardTitle>Join Whisper</CardTitle>
                     <CardDescription>Deploy your new project in one-click.</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -123,8 +123,23 @@ const SignUp = () => {
                                 } placeholder="@Username"
                                     onChange={(e) => {
                                         // Call the default onChange handler from register
-                                        register("userName").onChange(e);
+                                        register("userName").onChange(e)
+                                        // Call the debounced username check
+                                        debounced(e.target.value)
                                     }} />
+
+                                {
+                                    isCheckingUserName ?
+                                        (<p className="text-gray-500">Checking...</p>)
+                                        :
+                                        (<p className={`text-sm ${userNameMessage === 'username is unique' ? 'text-green-500' : 'text-red-500'}`}>
+                                            {userNameMessage}
+                                        </p>)
+                                }
+
+                                {
+                                    isCheckingUserName
+                                }
                             </div>
 
                             {/* email */}
@@ -181,7 +196,7 @@ const SignUp = () => {
                 </CardContent>
 
                 <div className="text-center mb-10">
-                    <p className="text-sm text-gray-500">Already have an account? <Link className="text-blue-600 underline " href='/signin'>Sign In</Link> 
+                    <p className="text-sm text-gray-500">Already have an account? <Link className="text-blue-600 underline " href='/signin'>Sign In</Link>
                     </p>
                 </div>
             </Card>
