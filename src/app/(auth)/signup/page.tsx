@@ -93,7 +93,6 @@ const SignUp = () => {
                 variant: "destructive",
                 title: "Signup failed",
                 description: "There was a problem with your request.",
-                action: <ToastAction altText="Try again">Try again</ToastAction>,
             })
             setIsSubmitting(false)
         }
@@ -120,7 +119,9 @@ const SignUp = () => {
                                             required: true,
                                         }
                                     )
-                                } placeholder="@Username"
+                                }
+                                    placeholder="@Username"
+                                    type="text"
                                     onChange={(e) => {
                                         // Call the default onChange handler from register
                                         register("userName").onChange(e)
@@ -152,7 +153,9 @@ const SignUp = () => {
                                             pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
                                         }
                                     )
-                                } placeholder="email@address.com" />
+                                }
+                                    placeholder="email@address.com"
+                                    type="email" />
                             </div>
 
                             {/* Password */}
@@ -164,7 +167,10 @@ const SignUp = () => {
                                             required: true,
                                         }
                                     )
-                                } placeholder="Password" />
+                                }
+                                    placeholder="Password"
+                                    type="password"
+                                />
                             </div>
 
                         </div>
