@@ -38,7 +38,7 @@ const VerifyAccount = () => {
                 description: response.data.message
             });
             // redirect to login page
-            router.replace('signin')
+            router.replace('/signin')
         } catch (error) {
             console.error("Error occurred while Verifying. Try Again", error);
 
