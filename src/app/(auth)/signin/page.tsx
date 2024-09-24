@@ -45,18 +45,18 @@ const SignIn = () => {
             password: data.password
         })
 
-        if(result?.error){
+        if (result?.error) {
             toast({
                 title: "Login Failed",
                 description: "Incorrect Email or Password",
                 variant: "destructive"
             })
         }
-        if(result?.url){
+        if (result?.url) {
             router.replace('/dashboard')
         }
         console.log(result);
-        
+
     }
 
 
@@ -82,7 +82,7 @@ const SignIn = () => {
                                     )
                                 }
                                     placeholder="Email/Username"
-                                     />
+                                />
                             </div>
 
                             {/* Password */}
