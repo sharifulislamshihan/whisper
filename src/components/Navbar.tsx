@@ -7,13 +7,18 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
 
     const [isOpen, setIsOpen] = useState(false)
     const { data: session } = useSession()
+    const router = useRouter()
 
     const user: User = session?.user as User
+
+
     const navItems = [
         { href: '/', label: 'Home' },
         { href: '/dashboard', label: 'Dashboard' },
@@ -23,9 +28,14 @@ const Navbar = () => {
         <nav className="bg-white dark:bg-gray-800 shadow-md">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
-                    <div className="flex-shrink-0 flex items-center">
-                        <Link href="/" className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                            Whisper
+                    <div className="w-40 flex-shrink-0 flex items-center">
+                        <Link href="/">
+                            <Image 
+                            src="https://res.cloudinary.com/drdgi9qdu/image/upload/v1727289698/SC7XrUHmR5CIgmQ-XWvE5Q-removebg-preview_rso636.png" 
+                            alt="Whisper Logo"
+                            width={500}
+                            height={500}
+                            layout="responsive" />
                         </Link>
                     </div>
                     <div className="hidden md:flex items-center space-x-4">

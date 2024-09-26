@@ -24,6 +24,7 @@ const MessageSchema: Schema<Message> = new Schema({
 // Schema for user
 
 export interface User extends Document {
+    name: string,
     userName: string,
     email: string,
     password: string,
@@ -37,6 +38,11 @@ export interface User extends Document {
 
 
 const UserSchema: Schema<User> = new Schema({
+
+    name: {
+        type: String,
+        required: [true, "Name is required"],
+    },
 
     userName: {
         type: String,

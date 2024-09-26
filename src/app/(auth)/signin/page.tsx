@@ -1,27 +1,13 @@
 'use client'
-import { useEffect, useState } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useDebounceCallback, useDebounceValue } from 'usehooks-ts'
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { signUpSchema } from "@/schemas/signUpSchema";
-import axios, { AxiosError } from "axios";
-import { apiResponse } from "@/customTypes/apiResponse";
-import { ToastAction } from "@radix-ui/react-toast";
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Link from "next/link";
 import { signInSchema } from "@/schemas/signInSchema";
 import { signIn } from "next-auth/react";
@@ -29,6 +15,7 @@ import { signIn } from "next-auth/react";
 const SignIn = () => {
     const { toast } = useToast()
     const router = useRouter()
+
     // zod implementation 
     const { register, handleSubmit } = useForm<z.infer<typeof signInSchema>>({
         resolver: zodResolver(signInSchema),
@@ -43,7 +30,7 @@ const SignIn = () => {
             redirect: false,
             identifier: data.identifier,
             password: data.password
-        })
+        });
 
         if (result?.error) {
             toast({
@@ -55,7 +42,7 @@ const SignIn = () => {
         if (result?.url) {
             router.replace('/dashboard')
         }
-        console.log(result);
+        console.log("Result", result?.url);
 
     }
 

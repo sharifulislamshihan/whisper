@@ -8,20 +8,11 @@ import { useForm } from "react-hook-form";
 import { signUpSchema } from "@/schemas/signUpSchema";
 import axios, { AxiosError } from "axios";
 import { apiResponse } from "@/customTypes/apiResponse";
-import { ToastAction } from "@radix-ui/react-toast";
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Link from "next/link";
 
 const SignUp = () => {
@@ -41,6 +32,7 @@ const SignUp = () => {
     const { register, handleSubmit } = useForm<z.infer<typeof signUpSchema>>({
         resolver: zodResolver(signUpSchema),
         defaultValues: {
+            name: '',
             userName: '',
             email: '',
             password: '',
@@ -110,6 +102,22 @@ const SignUp = () => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="grid w-full items-center gap-4">
 
+
+                        <div className="flex flex-col space-y-1.5">
+                                <Label>Nickname</Label>
+                                <Input {
+                                    ...register("name",
+                                        {
+                                            required: true,
+                                        }
+                                    )
+                                }
+                                    placeholder="Your Sweet Name"
+                                    type="text"
+                                />
+                            </div>
+
+
                             {/* userName */}
                             <div className="flex flex-col space-y-1.5">
                                 <Label>Username</Label>
@@ -127,6 +135,11 @@ const SignUp = () => {
                                         register("userName").onChange(e)
                                         // Call the debounced username check
                                         debounced(e.target.value)
+
+                                        // Reset the message when the input is empty
+                                        if (e.target.value.trim() === '') {
+                                            setUserNameMessage(''); // Clear message when username is empty
+                                        }
                                     }} />
 
                                 {
