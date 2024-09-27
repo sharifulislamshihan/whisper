@@ -30,12 +30,12 @@ const Navbar = () => {
                 <div className="flex justify-between h-16">
                     <div className="w-40 flex-shrink-0 flex items-center">
                         <Link href="/">
-                            <Image 
-                            src="https://res.cloudinary.com/drdgi9qdu/image/upload/v1727289698/SC7XrUHmR5CIgmQ-XWvE5Q-removebg-preview_rso636.png" 
-                            alt="Whisper Logo"
-                            width={500}
-                            height={500}
-                            layout="responsive" />
+                            <Image
+                                src="https://res.cloudinary.com/drdgi9qdu/image/upload/v1727289698/SC7XrUHmR5CIgmQ-XWvE5Q-removebg-preview_rso636.png"
+                                alt="Whisper Logo"
+                                width={500}
+                                height={500}
+                                layout="responsive" />
                         </Link>
                     </div>
                     <div className="hidden md:flex items-center space-x-4">
@@ -48,14 +48,53 @@ const Navbar = () => {
                                 {item.label}
                             </Link>
                         ))}
-                        <Link href="/signin" passHref>
-                            <Button variant="outline" className="ml-4 bg-purple-100 text-purple-600 border-purple-300 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-800">
-                                Signin
+                        {user ? (
+                            <Button
+                                variant="outline"
+                                className="ml-4 bg-purple-100 text-purple-600 border-purple-300 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-800"
+                                onClick={() => signOut({ callbackUrl: '/' })} // Optional: Redirect to home after sign out
+                            >
+                                Sign Out
                             </Button>
-                        </Link>
+                        ) : (
+                            <Link href="/signin" passHref>
+                                <Button
+                                    variant="outline"
+                                    className="ml-4 bg-purple-100 text-purple-600 border-purple-300 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-800"
+                                >
+                                    Sign In
+                                </Button>
+                            </Link>
+                        )}
                     </div>
+
+
+
+                    {/* for mobile view */}
                     <div className="md:hidden flex items-center">
                         <Sheet open={isOpen} onOpenChange={setIsOpen}>
+
+                            {/* signin or signout according to user */}
+                            {user ? (
+                                <Button
+                                    variant="outline"
+                                    className="ml-4 bg-purple-100 text-purple-600 border-purple-300 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-800"
+                                    onClick={() => signOut({ callbackUrl: '/' })} // Optional: Redirect to home after sign out
+                                >
+                                    Sign Out
+                                </Button>
+                            ) : (
+                                <Link href="/signin" passHref>
+                                    <Button
+                                        variant="outline"
+                                        className="ml-4 bg-purple-100 text-purple-600 border-purple-300 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-800"
+                                    >
+                                        Sign In
+                                    </Button>
+                                </Link>
+                            )}
+
+
                             <SheetTrigger asChild>
                                 <Button variant="ghost" size="icon" className="text-gray-700 dark:text-gray-300">
                                     <Menu className="h-6 w-6" />
@@ -74,11 +113,6 @@ const Navbar = () => {
                                             {item.label}
                                         </Link>
                                     ))}
-                                    <Link href="/signin" passHref onClick={() => setIsOpen(false)}>
-                                        <Button className="w-full bg-purple-600 text-white hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600">
-                                            Signin
-                                        </Button>
-                                    </Link>
                                 </nav>
                             </SheetContent>
                         </Sheet>

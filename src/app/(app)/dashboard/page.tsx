@@ -333,15 +333,17 @@ const Dashboard = () => {
                 }
             </div>
 
-            <Dialog open={selectedMessage !== null} onOpenChange={() => setSelectedMessage(null)}>
+            <Dialog
+            open={selectedMessage !== null} 
+            onOpenChange={() => setSelectedMessage(null)}>
                 <DialogContent className="bg-white dark:bg-gray-800">
                     <DialogHeader>
-                        <DialogTitle className="text-purple-600 dark:text-purple-400">Message Details</DialogTitle>
+                        <DialogTitle className="text-xl font-semibold text-purple-600 dark:text-purple-400">Message Details</DialogTitle>
                     </DialogHeader>
                     {selectedMessage && (
                         <>
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{new Date(selectedMessage?.createdAt).toLocaleString()}</p>
-                            <p className="text-gray-900 dark:text-white">{selectedMessage?.content}</p>
+                            <p className="text-lg text-gray-900 dark:text-white my-5">{selectedMessage?.content}</p>
 
                         </>
                     )}
