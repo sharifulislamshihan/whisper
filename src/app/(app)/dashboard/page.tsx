@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
-import { RefreshCw, Trash2, Copy, X } from 'lucide-react'
+import { RefreshCw, Trash2, Copy, X, Loader } from 'lucide-react'
 import { User } from "next-auth";
 
 
@@ -29,6 +29,8 @@ const Dashboard = () => {
     const [isSwitchLoading, setIsSwitchLoading] = useState(false)
     const [profileUrl, setProfileUrl] = useState('');
     const [selectedMessage, setSelectedMessage] = useState(null);
+    // New state for refresh button loading
+    const [refreshLoading, setRefreshLoading] = useState(false);
 
 
 
@@ -38,10 +40,6 @@ const Dashboard = () => {
     // extracting session
     const { data: session, status } = useSession()
 
-    // handling deleting message
-    const handleDeleteMessage = (messageId: string) => {
-        setMessages(messages.filter((message) => message._id !== messageId))
-    }
 
     // Integrate the schema into React Hook Form
     const { register, watch, setValue } = useForm({
@@ -49,7 +47,7 @@ const Dashboard = () => {
     })
 
     // to watch on accept messages field
-    const acceptMessages = watch('acceptMessages')
+    const acceptMessages = watch('acceptMessages', true)
 
     // fetching accepting message
     const fetchAcceptMessage = useCallback(async () => {
@@ -57,12 +55,19 @@ const Dashboard = () => {
 
         try {
             const response = await axios.get<apiResponse>('/api/acceptMessages')
-            setValue('acceptMessages', response.data.isAcceptingMessage)
+            // setValue('acceptMessages', response.data.isAcceptingMessage)
+
+            if (response.data.success) {
+                setValue('acceptMessages', response.data.isAcceptingMessage);
+            } else {
+                throw new Error(response.data.message);
+            }
+
         } catch (error) {
             const axiosError = error as AxiosError<apiResponse>;
             toast({
                 title: 'Error',
-                description: axiosError.response?.data.message || "Failed to fetch message settings",
+                description: axiosError.response?.data.message || "Failed to update message accept status. Try Again!",
                 variant: "destructive"
             })
         } finally {
@@ -77,9 +82,12 @@ const Dashboard = () => {
         setIsLoading(true)
         setIsSwitchLoading(false)
 
+        // Set refresh loading state when refresh is clicked
+        if (refresh) {
+            setRefreshLoading(true);
+        }
+
         try {
-
-
             const response = await axios.get<apiResponse>('/api/getMessages')
 
             // Ensure the response exists and is an array
@@ -88,15 +96,15 @@ const Dashboard = () => {
                 : [];
             setMessages(messages)
 
-            console.log("response messages", messages);
-
-
+            // toast while refreshing
             if (refresh) {
                 toast({
                     title: 'Refreshed Messages',
                     description: "Showing latest Messages"
                 })
             }
+
+            // console.log("response messages", messages);
         } catch (error) {
             const axiosError = error as AxiosError<apiResponse>;
             toast({
@@ -106,6 +114,7 @@ const Dashboard = () => {
             })
         } finally {
             setIsLoading(false)
+            setRefreshLoading(false)
             setIsSwitchLoading(false)
 
         }
@@ -113,18 +122,11 @@ const Dashboard = () => {
 
 
 
-    useEffect(() => {
-        if (!session || !session.user) {
-            return;
-        }
-        fetchAcceptMessage();
-        fetchAllMessages();
-    }, [session, setValue, fetchAcceptMessage, fetchAllMessages])
-
-
-
     // handle switch change
     const handleSwitchChange = async () => {
+
+        setIsSwitchLoading(true)
+
         try {
             const response = await axios.post<apiResponse>('/api/acceptMessages', {
                 acceptMessages: !acceptMessages
@@ -144,9 +146,22 @@ const Dashboard = () => {
                 description: axiosError.response?.data.message || "Failed to fetch message",
                 variant: "destructive"
             })
+        } finally {
+            setIsSwitchLoading(false)
         }
     }
     //console.log("session", session?.user?.name);
+
+
+    useEffect(() => {
+        if (!session || !session.user) {
+            return;
+        }
+        fetchAcceptMessage();
+        fetchAllMessages();
+    }, [session, setValue, fetchAcceptMessage, fetchAllMessages])
+
+
 
     // handle delete Message
     const handleDelete = async (id: string) => {
@@ -205,9 +220,14 @@ const Dashboard = () => {
     // Show a loading state while session status is being determined
     // todo: need to make a ui for loading state
     if (status === 'loading') {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex items-center justify-center h-screen">
+                {/* Add animation and styling */}
+                <Loader className="animate-spin w-8 h-8 text-purple-600" />
+                <span className="ml-2 text-lg">Loading...</span>
+            </div>
+        );
     }
-
     // redirect to signin page if the user is not loggedin
     if (!session || !session.user) {
         return router.replace('/signin')
@@ -257,12 +277,21 @@ const Dashboard = () => {
 
                 </div>
 
+                {/* Refresh button */}
                 <Button
+                    // Trigger refresh and set loading state
+                    onClick={() => fetchAllMessages(true)}
                     variant="outline"
                     size="sm"
-                    className=" w-28 items-center bg-purple-100 text-purple-600 border-purple-300 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-800">
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Refresh
+                    // Disable the button while loading
+                    disabled={refreshLoading}
+                    className="w-28 items-center bg-purple-100 text-purple-600 border-purple-300 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-800">
+                    {refreshLoading ? 'Loading...' : (
+                        <>
+                            <RefreshCw className="w-4 h-4 mr-2" />
+                            Refresh
+                        </>
+                    )}
                 </Button>
 
 
@@ -273,26 +302,34 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {
-                    messages.length > 0 ? (
-                        messages.map((message, index) => (
-                            <Card key={message.id} className="cursor-pointer hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-800 h-30" onClick={() => setSelectedMessage(message)}>
-                                <CardContent className="flex items-center justify-between p-4">
-                                    <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{new Date(message.createdAt).toLocaleString()}</p>
-                                        <p className="text-gray-900 dark:text-white">{message.content.substring(0, 50)}...</p>
-                                    </div>
-                                    <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(message._id); }} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300
-                                    flex items-center">
-                                        <Trash2 className=" w-4 h-4" />
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        ))
+                    isLoading ? (
+                        <div className="flex items-center justify-center h-screen">
+                            {/* Add animation and styling */}
+                            <Loader className="animate-spin w-8 h-8 text-purple-600" />
+                            <span className="ml-2 text-lg">Loading Messages...</span>
+                        </div>
                     )
                         :
-                        (
-                            <p>No message to show</p>
+                        messages.length > 0 ? (
+                            messages.map((message, index) => (
+                                <Card key={message.id} className="cursor-pointer hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-800 h-30" onClick={() => setSelectedMessage(message)}>
+                                    <CardContent className="flex items-center justify-between p-4">
+                                        <div>
+                                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{new Date(message.createdAt).toLocaleString()}</p>
+                                            <p className="text-gray-900 dark:text-white">{message.content.substring(0, 50)}...</p>
+                                        </div>
+                                        <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(message._id); }} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300
+                                    flex items-center">
+                                            <Trash2 className=" w-4 h-4" />
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            ))
                         )
+                            :
+                            (
+                                <p>No message to show</p>
+                            )
                 }
             </div>
 
