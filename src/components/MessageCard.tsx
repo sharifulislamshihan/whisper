@@ -1,70 +1,22 @@
 'use client'
-import { Card } from "./ui/card";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
+
+import { Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
-import { Message } from "@/model/user";
-import axios from "axios";
-import { apiResponse } from "@/customTypes/apiResponse";
-import Swal from 'sweetalert2'
-import { useToast } from "@/hooks/use-toast";
-type MessageCardProps = {
-    message: Message;
-    onMessageDelete: (messageId: string) => void
-}
+import { Card, CardContent } from "./ui/card";
 
-const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
-    const { toast } = useToast()
-
-
-    const handleMessageDelete = async () => {
-        const response = await axios.delete<apiResponse>(`/api/deleteMessage/${message._id}`)
-
-        // sweet alert
-        // Swal.fire({
-        //     title: "Are you sure?",
-        //     text: "You won't be able to revert this!",
-        //     icon: "warning",
-        //     showCancelButton: true,
-        //     confirmButtonColor: "#3085d6",
-        //     cancelButtonColor: "#d33",
-        //     confirmButtonText: "Yes, delete it!"
-        // }).then((result) => {
-        //     if (result.isConfirmed) {
-        //         Swal.fire({
-        //             title: "Deleted!",
-        //             text: "Your file has been deleted.",
-        //             icon: "success"
-        //         });
-        //     }
-        // });
-        toast({
-            title: response.data.message
-        })
-        onMessageDelete(message._id)
-    }
+const MessageCard = () => {
     return (
-        <div>
-            <AlertDialog>
-                <AlertDialogTrigger asChild>
-                    <Button variant="outline">Show Dialog</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete your
-                            account and remove your data from our servers.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-            <Card className="w-[350px]">
-            </Card>
-        </div>
+        <Card key={message.id} className="cursor-pointer hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-800" onClick={() => setSelectedMessage(message)}>
+            <CardContent className="flex items-center justify-between p-4">
+                <div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{message.date}</p>
+                    <p className="text-gray-900 dark:text-white">{message.content.substring(0, 50)}...</p>
+                </div>
+                <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(message.id); }} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                    <Trash2 className="w-4 h-4" />
+                </Button>
+            </CardContent>
+        </Card>
     );
 };
 

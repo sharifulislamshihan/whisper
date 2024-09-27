@@ -23,7 +23,6 @@ export async function POST(req: Request) {
     // Return the generated text as a JSON response
     return NextResponse.json({ message: generatedMessage });
 
-    console.log(result.response.text());
 
   } catch (error) {
     console.error('Error generating content:', error);

@@ -7,8 +7,8 @@ export async function DELETE(request: Request, { params }: { params: { messageId
 
     // extracting selected message ID
     const messageId = params.messageId
-
-
+    console.log(messageId);
+    
 
     await dbConnect();
 
@@ -55,7 +55,7 @@ export async function DELETE(request: Request, { params }: { params: { messageId
                 message: "Message deleted successfully",
             },
             {
-                status: 401
+                status: 200
             }
         )
     } catch (error) {

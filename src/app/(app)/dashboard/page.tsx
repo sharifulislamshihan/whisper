@@ -6,7 +6,7 @@ import { Message } from "@/model/user";
 import { acceptMessagesSchema } from "@/schemas/acceptMessages";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -28,6 +28,7 @@ const Dashboard = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [isSwitchLoading, setIsSwitchLoading] = useState(false)
     const [profileUrl, setProfileUrl] = useState('');
+    const [selectedMessage, setSelectedMessage] = useState(null);
 
 
 
@@ -67,7 +68,9 @@ const Dashboard = () => {
         } finally {
             setIsSwitchLoading(false)
         }
-    }, [setValue, toast])
+    }, [setValue])
+
+
 
     // fetch all message
     const fetchAllMessages = useCallback(async (refresh: boolean = false) => {
@@ -75,8 +78,18 @@ const Dashboard = () => {
         setIsSwitchLoading(false)
 
         try {
+
+
             const response = await axios.get<apiResponse>('/api/getMessages')
-            setMessages(response.data.messages || [])
+
+            // Ensure the response exists and is an array
+            const messages = Array.isArray(response.data.message) && response.data.message.length > 0
+                ? response.data.message
+                : [];
+            setMessages(messages)
+
+            console.log("response messages", messages);
+
 
             if (refresh) {
                 toast({
@@ -104,8 +117,8 @@ const Dashboard = () => {
         if (!session || !session.user) {
             return;
         }
-        fetchAcceptMessage()
-        fetchAcceptMessage()
+        fetchAcceptMessage();
+        fetchAllMessages();
     }, [session, setValue, fetchAcceptMessage, fetchAllMessages])
 
 
@@ -133,7 +146,37 @@ const Dashboard = () => {
             })
         }
     }
-    console.log("session", session?.user?.name);
+    //console.log("session", session?.user?.name);
+
+    // handle delete Message
+    const handleDelete = async (id: string) => {
+        const session = await getSession(); // Get the session
+
+        if (!session) {
+            toast({
+                title: 'Not authenticated',
+                description: 'You need to log in to delete messages.',
+                variant: 'destructive',
+            });
+            return;
+        }
+
+        try {
+            const response = await axios.delete(`/api/deleteMessage/${id}`);
+            toast({
+                title: response.data.message,
+            });
+            // Update your messages state here if needed
+            setMessages((prevMessages) => prevMessages.filter((msg) => msg._id !== id));
+            setSelectedMessage(null); // Close the dialog after deletion
+        } catch (error) {
+            toast({
+                title: 'Error deleting message',
+                description: axiosError.response?.data.message || 'Something went wrong!',
+                variant: 'destructive',
+            });
+        }
+    };
 
 
     // Extracting Name
@@ -148,9 +191,6 @@ const Dashboard = () => {
             setProfileUrl(url);
         }
     }, [session?.user?.userName]);
-
-    console.log("ProfileUrl", profileUrl);
-
 
 
     // copy to clipboard function for copying profile url
@@ -173,6 +213,9 @@ const Dashboard = () => {
         return router.replace('/signin')
     }
 
+    console.log("Messages", messages);
+
+
     return (
         <div className="max-w-4xl mx-auto px-4 py-8 mt-10">
             <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-5">Hi <span className="text-purple-600">{name}</span> </h1>
@@ -183,7 +226,7 @@ const Dashboard = () => {
 
                 <div className="flex items-center space-x-2">
                     <Switch
-                    {...register('acceptMessages')}
+                        {...register('acceptMessages')}
                         checked={acceptMessages}
                         onCheckedChange={handleSwitchChange}
                         disabled={isSwitchLoading}
@@ -226,45 +269,55 @@ const Dashboard = () => {
 
             </div>
 
-            {/* <div className="space-y-4">
-                {messages.map((message) => (
-                    <Card key={message.id} className="cursor-pointer hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-800" onClick={() => setSelectedMessage(message)}>
-                        <CardContent className="flex items-center justify-between p-4">
-                            <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{message.date}</p>
-                                <p className="text-gray-900 dark:text-white">{message.content.substring(0, 50)}...</p>
-                            </div>
-                            <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(message.id); }} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
-                                <Trash2 className="w-4 h-4" />
-                            </Button>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div> */}
 
-            {/* <Dialog open={selectedMessage !== null} onOpenChange={() => setSelectedMessage(null)}>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {
+                    messages.length > 0 ? (
+                        messages.map((message, index) => (
+                            <Card key={message.id} className="cursor-pointer hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-800 h-30" onClick={() => setSelectedMessage(message)}>
+                                <CardContent className="flex items-center justify-between p-4">
+                                    <div>
+                                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{new Date(message.createdAt).toLocaleString()}</p>
+                                        <p className="text-gray-900 dark:text-white">{message.content.substring(0, 50)}...</p>
+                                    </div>
+                                    <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(message._id); }} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300
+                                    flex items-center">
+                                        <Trash2 className=" w-4 h-4" />
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        ))
+                    )
+                        :
+                        (
+                            <p>No message to show</p>
+                        )
+                }
+            </div>
+
+            <Dialog open={selectedMessage !== null} onOpenChange={() => setSelectedMessage(null)}>
                 <DialogContent className="bg-white dark:bg-gray-800">
                     <DialogHeader>
                         <DialogTitle className="text-purple-600 dark:text-purple-400">Message Details</DialogTitle>
                     </DialogHeader>
                     {selectedMessage && (
                         <>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{selectedMessage.date}</p>
-                            <p className="text-gray-900 dark:text-white">{selectedMessage.content}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{new Date(selectedMessage?.createdAt).toLocaleString()}</p>
+                            <p className="text-gray-900 dark:text-white">{selectedMessage?.content}</p>
+
                         </>
                     )}
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setSelectedMessage(null)} className="bg-gray-100 text-gray-600 border-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
-                            Close
-                        </Button>
-                        <Button variant="destructive" onClick={() => handleDelete(selectedMessage.id)} className="bg-red-500 text-white hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-600">
+                        <Button variant="destructive" onClick={() => handleDelete(selectedMessage._id)} className="bg-red-500 text-white hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-600">
                             Delete
                         </Button>
                     </DialogFooter>
                 </DialogContent>
-            </Dialog> */}
+            </Dialog>
         </div>
     );
 };
 
 export default Dashboard;
+

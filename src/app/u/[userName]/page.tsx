@@ -25,7 +25,6 @@ const page = () => {
         setUsername(user);
     }, []);
 
-    console.log(username);
 
 
 
@@ -46,7 +45,6 @@ const page = () => {
             // spliting message here
             const suggestions = suggestMessages.split('||').map(s => s.trim());
 
-            console.log("suggest Messages : ", suggestMessages);
             // update state
             setSuggestedMessages(suggestions)
             setLoading(false)
@@ -62,7 +60,6 @@ const page = () => {
         }
     }
 
-    console.log(suggestedMessages);
 
 
     // Sending Message
@@ -83,9 +80,6 @@ const page = () => {
                 userName: username,
                 content: message
             });
-
-            console.log("Response", response.data);
-            console.log("Message", message);
 
             if (response.data.success) {
                 toast({

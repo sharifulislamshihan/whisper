@@ -42,7 +42,6 @@ const SignIn = () => {
         if (result?.url) {
             router.replace('/dashboard')
         }
-        console.log("Result", result?.url);
 
     }
 

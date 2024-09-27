@@ -62,7 +62,6 @@ export async function POST(request: Request) {
             )
         }
     } catch (error) {
-        console.log("failed to update user status to accept messages");
 
         return Response.json(
             {

@@ -10,7 +10,11 @@ export async function GET(request: Request) {
 
     // to get logged in user
     const session = await getServerSession(authOptions)
+    console.log("session", session);
+
     const user: User = session?.user as User
+
+    //console.log("User Id", user);
 
 
     if (!session || !session.user) {
@@ -27,15 +31,18 @@ export async function GET(request: Request) {
 
     // user._id stored as a string so converted into mongoose objectId and stored it in userId
     const userId = new mongoose.Types.ObjectId(user._id)
+    console.log("User Id", userId);
+
+
 
     try {
         const user = await UserModel.aggregate([
 
             // match the id which is logged in
-            { $match: { id: userId } },
+            { $match: { _id: userId } },
 
             // it will turn messages array into multiple object. single object for single array element
-            { $unwind: '$messages' },
+            { $unwind: { path: '$messages', preserveNullAndEmptyArrays: true } },
 
             // sort the messages depends on created time
             { $sort: { 'messages.createdAt': -1 } },
@@ -43,7 +50,7 @@ export async function GET(request: Request) {
             // after the sorting the all the messages pushed into in na "message object" must be ensuring that all the messages have the same id
             { $group: { _id: '$_id', messages: { $push: '$messages' } } }
         ])
-
+        console.log("User", user);
 
         if (!user || user.length === 0) {
             return Response.json(
@@ -52,7 +59,7 @@ export async function GET(request: Request) {
                     message: "User not found",
                 },
                 {
-                    status: 401
+                    status: 404
                 }
             )
         }
@@ -63,18 +70,18 @@ export async function GET(request: Request) {
                     success: true,
                     //response message
                     message: user[0].messages,
+
                 },
                 {
                     status: 200
                 }
             )
+
         }
     } catch (error) {
-
-        console.log("An unexpected error occurred", error)
         return Response.json(
             {
-                success: true,
+                success: false,
                 //response message
                 message: "An unexpected Error occurred"
             },
