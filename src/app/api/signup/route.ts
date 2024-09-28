@@ -1,7 +1,7 @@
-import { sendVerificationEmail } from "@/helper/sendVerificationEmail";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/user";
 import bcrypt from "bcryptjs"
+import { sendVerificationEmail } from "../sendVerificationEmail";
 
 
 
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
 
         // sending Verification email
 
-        const emailResponse = await sendVerificationEmail(
+        const emailResponse = await sendVerificationEmail (
             email,
             userName,
             verifyCode,

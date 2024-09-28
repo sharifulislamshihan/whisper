@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 
-const page = () => {
+const Page = () => {
 
     const [username, setUsername] = useState<string | null>(null);
     const [message, setMessage] = useState('')
@@ -174,4 +174,4 @@ const page = () => {
 
 
 
-export default page;
+export default Page;

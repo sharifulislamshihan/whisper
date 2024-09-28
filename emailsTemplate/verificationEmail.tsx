@@ -1,125 +1,142 @@
-import { Html, Head, Preview, Body, Container, Section, Heading, Text, Font } from '@react-email/components';
-import * as React from 'react';
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Hr,
+  Html,
+  Img,
+  Preview,
+  Section,
+  Text,
+} from "@react-email/components";
+import * as React from "react";
 
 interface VerificationEmailProps {
-    userName: string;
-    otp: string;
+  userName: string;
+  otp: string;
 }
 
 export default function VerificationEmail({ userName, otp }: VerificationEmailProps) {
-    return (
-        <Html lang="en">
-            <Head>
-                <style>
-                    {`
-        /* General Styles */
-        body {
-          margin: 0;
-          padding: 0;
-          font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
-        }
-        
-        /* Container Styling */
-        .container {
-          max-width: 600px;
-          background-color: #ffffff;
-          padding: 24px;
-          margin: 0 auto;
-          border-radius: 8px;
-          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
+  return (
+    <Html>
+    <Head />
+    <Preview>Whisper Email Verification</Preview>
+    <Body style={main}>
+      <Container style={container}>
+        <Section style={coverSection}>
+          <Section style={imageSection}>
+            <Img
+              src="https://res.cloudinary.com/drdgi9qdu/image/upload/v1727289698/SC7XrUHmR5CIgmQ-XWvE5Q-removebg-preview_rso636.png"
 
-        /* Section Styling */
-        .section {
-          text-align: center;
-        }
+              width="400"
+              height="200"
+              alt="Whisper Logo"
+            />
+          </Section>
+          <Section style={upperSection}>
+            <Heading style={h1}>Verify your email address</Heading>
+            <Text style={mainText}>
+              Hello {userName},
+              Thanks for starting the new Whisper account creation process. We
+              want to make sure it's really you. Please enter the following
+              verification code when prompted. If you don&apos;t want to
+              create an account, you can ignore this message.
+            </Text>
+            <Section style={verificationSection}>
+              <Text style={verifyText}>Verification code</Text>
 
-        /* Heading Styling */
-        .heading {
-          font-size: 24px;
-          font-weight: 700;
-          color: #111827;
-          margin-bottom: 16px;
-        }
-
-        /* Text Styling */
-        .text {
-          font-size: 16px;
-          color: #4B5563;
-          margin-bottom: 16px;
-        }
-
-        /* OTP Code Styling */
-        .otp-code {
-          font-size: 28px;
-          font-weight: bold;
-          color: #3B82F6;
-          letter-spacing: 0.1em;
-          margin: 20px 0;
-        }
-
-        /* Footer Text Styling */
-        .footer-text {
-          font-size: 14px;
-          color: #6B7280;
-          margin-top: 24px;
-        }
-
-        /* Responsive Styles */
-        @media only screen and (max-width: 600px) {
-          .container {
-            width: 90%;
-            padding: 16px;
-          }
-
-          .heading {
-            font-size: 20px;
-          }
-
-          .text, .footer-text {
-            font-size: 14px;
-          }
-
-          .otp-code {
-            font-size: 24px;
-          }
-        }
-      `}
-                </style>
-            </Head>
-            <Preview>Your OTP Code for Secure Access</Preview> {/* Preview Text */}
-            {/* <Font
-                fontFamily="Roboto" fallbackFontFamily='Arial'
-                webFont={{
-                    url: '',
-                    format: 'woff2',
-                }}
-            >
-            </Font> */}
-            <Body>
-                <Container className="container">
-                    <Section className="section">
-                        <Heading className="heading">Hello {userName},</Heading>
-                        <Text className="text">
-                            We received a request to access your account using an OTP (One-Time Password).
-                        </Text>
-                        <Text className="otp-code">{otp}</Text> {/* Display OTP Code */}
-                        <Text className="text">
-                            Please use this OTP to complete your verification. The code will expire in 10 minutes.
-                        </Text>
-                        <Text className="text">
-                            If you did not request this, please ignore this email or contact our support.
-                        </Text>
-                        <Text className="footer-text">
-                            Thank you,
-                            <br />
-                            The Whisper Team
-                        </Text>
-                    </Section>
-                </Container>
-            </Body>
-        </Html>
-    )
+              <Text style={codeText}>{otp}</Text>
+              <Text style={validityText}>
+                (This code is valid for 10 minutes)
+              </Text>
+            </Section>
+          </Section>
+          <Hr />
+        </Section>
+        <Text style={footerText}>
+          This message was produced and distributed by Whisper.
+        </Text>
+      </Container>
+    </Body>
+  </Html>
+)
 
 }
+
+
+const main = {
+backgroundColor: "#fff",
+color: "#f0eded",
+};
+
+const container = {
+padding: "20px",
+margin: "0 auto",
+backgroundColor: "#eee",
+};
+
+const h1 = {
+color: "#333",
+fontFamily:
+  "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+fontSize: "20px",
+fontWeight: "bold",
+marginBottom: "15px",
+};
+
+
+const text = {
+color: "#333",
+fontFamily:
+  "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+fontSize: "14px",
+margin: "24px 0",
+};
+
+const imageSection = {
+backgroundColor: "#ddcced",
+display: "flex",
+padding: "20px 0",
+alignItems: "center",
+justifyContent: "center",
+};
+
+const coverSection = { backgroundColor: "#fff" };
+
+const upperSection = { padding: "25px 35px" };
+
+const footerText = {
+...text,
+fontSize: "12px",
+padding: "0 20px",
+};
+
+const verifyText = {
+...text,
+margin: 0,
+fontWeight: "bold",
+textAlign: "center" as const,
+};
+
+const codeText = {
+...text,
+fontWeight: "bold",
+fontSize: "36px",
+margin: "10px 0",
+textAlign: "center" as const,
+};
+
+const validityText = {
+...text,
+margin: "0px",
+textAlign: "center" as const,
+};
+
+const verificationSection = {
+display: "flex",
+alignItems: "center",
+justifyContent: "center",
+};
+
+const mainText = { ...text, marginBottom: "14px" };

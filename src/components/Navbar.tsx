@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
@@ -13,9 +13,7 @@ import { useRouter } from "next/navigation";
 const Navbar = () => {
 
     const [isOpen, setIsOpen] = useState(false)
-    const { data: session } = useSession()
-    const router = useRouter()
-
+    const { data: session, status } = useSession()
     const user: User = session?.user as User
 
 
@@ -24,6 +22,13 @@ const Navbar = () => {
         { href: '/dashboard', label: 'Dashboard' },
         { href: '/feedback', label: 'Feedback' },
     ]
+
+    // If the session is loading, return null or a loading indicator
+    if (status === "loading") {
+        return null;
+    }
+
+
     return (
         <nav className="bg-white dark:bg-gray-800 shadow-md">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,10 +37,10 @@ const Navbar = () => {
                         <Link href="/">
                             <Image
                                 src="https://res.cloudinary.com/drdgi9qdu/image/upload/v1727289698/SC7XrUHmR5CIgmQ-XWvE5Q-removebg-preview_rso636.png"
-                                alt="Whisper Logo"
                                 width={500}
                                 height={500}
-                                layout="responsive" />
+                                alt="Whisper Logo"
+                            />
                         </Link>
                     </div>
                     <div className="hidden md:flex items-center space-x-4">
@@ -52,7 +57,7 @@ const Navbar = () => {
                             <Button
                                 variant="outline"
                                 className="ml-4 bg-purple-100 text-purple-600 border-purple-300 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-800"
-                                onClick={() => signOut({ callbackUrl: '/' })} // Optional: Redirect to home after sign out
+                                onClick={() => signOut({ callbackUrl: '/' })} // Redirect to home after sign out
                             >
                                 Sign Out
                             </Button>
@@ -79,7 +84,7 @@ const Navbar = () => {
                                 <Button
                                     variant="outline"
                                     className="ml-4 bg-purple-100 text-purple-600 border-purple-300 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700 dark:hover:bg-purple-800"
-                                    onClick={() => signOut({ callbackUrl: '/' })} // Optional: Redirect to home after sign out
+                                    onClick={() => signOut({ callbackUrl: '/' })} // Redirect to home after sign out
                                 >
                                     Sign Out
                                 </Button>
