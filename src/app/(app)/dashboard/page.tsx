@@ -225,7 +225,7 @@ const Dashboard = () => {
     return (
 
         <div>
-            <div className="max-w-4xl mx-auto px-4 py-8 mt-10">
+            <div className="max-w-4xl mx-auto px-4 py-8 mt-10 h-screen">
 
 
                 <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-5">Hi <span className="text-purple-600">{name}</span> </h1>

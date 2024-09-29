@@ -33,7 +33,7 @@ const ResetPassword = () => {
     // Decode the email
     const decodedEmail = decodeURIComponent(params.email);
 
-    console.log("decoded", decodedEmail);
+    // console.log("decoded", decodedEmail);
 
     const { toast } = useToast();
     const router = useRouter();

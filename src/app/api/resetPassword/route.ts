@@ -8,10 +8,10 @@ export async function POST(request: Request) {
     try {
         const { email, verifyCode, newPassword, confirmPassword } = await request.json();
 
-        console.log("email :", email);
-        console.log("verifyCode:", verifyCode);
-        console.log("newPassword:", newPassword);
-        console.log("confirmPassword:", confirmPassword);
+        // console.log("email :", email);
+        // console.log("verifyCode:", verifyCode);
+        // console.log("newPassword:", newPassword);
+        // console.log("confirmPassword:", confirmPassword);
         
 
         if (newPassword !== confirmPassword) {

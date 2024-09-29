@@ -10,7 +10,7 @@ export async function GET(request: Request) {
 
     // to get logged in user
     const session = await getServerSession(authOptions)
-    console.log("session", session);
+    // console.log("session", session);
 
     const user: User = session?.user as User
 
@@ -31,7 +31,7 @@ export async function GET(request: Request) {
 
     // user._id stored as a string so converted into mongoose objectId and stored it in userId
     const userId = new mongoose.Types.ObjectId(user._id)
-    console.log("User Id", userId);
+    // console.log("User Id", userId);
 
 
 
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
             // after the sorting the all the messages pushed into in na "message object" must be ensuring that all the messages have the same id
             { $group: { _id: '$_id', messages: { $push: '$messages' } } }
         ])
-        console.log("User", user);
+        // console.log("User", user);
 
         if (!user || user.length === 0) {
             return Response.json(

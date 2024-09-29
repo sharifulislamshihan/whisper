@@ -94,7 +94,7 @@ export async function sendForgetPassVerificationEmail(
 
 
 
-        console.log(emailHTML);
+        // console.log(emailHTML);
 
 
         // Send email using Nodemailer
@@ -105,7 +105,7 @@ export async function sendForgetPassVerificationEmail(
             html: emailHTML, // The HTML content of your email (rendered from your template)
         });
 
-        console.log("Email sent successfully to ", email);
+        // console.log("Email sent successfully to ", email);
 
         return { success: true, message: "Verification email sent successfully" };
     } catch (emailError) {

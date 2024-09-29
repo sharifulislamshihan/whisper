@@ -96,7 +96,7 @@ export async function sendVerificationEmail(
 
 
 
-        console.log(emailHTML);
+        // console.log(emailHTML);
 
 
         // Send email using Nodemailer
@@ -107,7 +107,7 @@ export async function sendVerificationEmail(
             html: emailHTML, // The HTML content of your email (rendered from your template)
         });
 
-        console.log("Email sent successfully to ", email);
+        // console.log("Email sent successfully to ", email);
 
         return { success: true, message: "Verification email sent successfully" };
     } catch (emailError) {

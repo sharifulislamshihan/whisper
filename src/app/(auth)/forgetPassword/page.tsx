@@ -33,7 +33,7 @@ const ForgetPassword = () => {
                 title: response.data.message,
             })
             reset();
-            router.replace(`/resetPassword/${data.email}` )
+            router.replace(`/resetPassword/${data.email}`)
 
         } catch (error) {
             console.error("Error occurred while Verifying. Try Again", error);
@@ -55,7 +55,7 @@ const ForgetPassword = () => {
             <Card className="w-[350px] border-purple-600">
                 <CardHeader>
                     <CardTitle className="text-xl font-semibold">Forgot Password?</CardTitle>
-                    <CardDescription className="text-md">Please provide your email address, and we'll send you a <strong>Reset Code</strong></CardDescription>
+                    <CardDescription className="text-md">Please provide your email address, and we&apos;ll send you a <strong>Reset Code</strong></CardDescription>
                 </CardHeader>
 
                 <CardContent>

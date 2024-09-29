@@ -127,7 +127,7 @@ export async function GET(request: Request) {
             )
         }
     } catch (error) {
-        console.log("Message accepting status getting error");
+        // console.log("Message accepting status getting error");
 
         return Response.json(
             {

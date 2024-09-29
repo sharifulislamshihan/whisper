@@ -7,7 +7,7 @@ export async function DELETE(request: Request, { params }: { params: { messageId
 
     // extracting selected message ID
     const messageId = params.messageId
-    console.log(messageId);
+    // console.log(messageId);
     
 
     await dbConnect();

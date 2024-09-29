@@ -67,7 +67,7 @@ export async function POST(request: Request) {
                 messages: [],
             })
             const savedUser = await newUser.save();
-            console.log("New saved user", savedUser);
+            // console.log("New saved user", savedUser);
             
         }
 
