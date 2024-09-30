@@ -15,6 +15,8 @@ const Page = () => {
     const [message, setMessage] = useState('')
     const [suggestedMessages, setSuggestedMessages] = useState<string[]>([])
     const [loading, setLoading] = useState<boolean>(false);
+    // state sending message
+    const [sending, setSending] = useState<boolean>(false);
 
 
     // for title
@@ -79,7 +81,8 @@ const Page = () => {
             });
             return;
         }
-
+        // start sending message
+        setSending(true);
         try {
             const response = await axios.post('/api/sendMessage', {
                 userName: username,
@@ -110,6 +113,8 @@ const Page = () => {
                 description: axiosError.response?.data.message || "Internal Server Error. Try again!",
                 variant: "destructive"
             })
+        } finally {
+            setSending(false);
         }
     }
 
@@ -129,7 +134,10 @@ const Page = () => {
                 <div className="flex justify-center items-center mb-6">
                     <Button
                         onClick={sendMessage}
-                        className="bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-700 dark:hover:bg-purple-600">Send Message</Button>
+                        disabled={sending} // Disable the button when sending
+                        className={`bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-700 dark:hover:bg-purple-600 ${sending ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                        {sending ? 'Sending...' : 'Send Message'}
+                    </Button>
 
                 </div>
 
