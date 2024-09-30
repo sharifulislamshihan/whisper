@@ -1,6 +1,7 @@
 # Whisper
 
-![Whisper Logo](https://res.cloudinary.com/drdgi9qdu/image/upload/v1727289698/SC7XrUHmR5CIgmQ-XWvE5Q-removebg-preview_rso636.png)
+![Whisper Logo](https://res.cloudinary.com/drdgi9qdu/image/upload/v1727701582/mk6wydy6duthdfxadkbn.jpg)
+
 
 Whisper is an innovative AI-integrated anonymous feedback platform that empowers users to receive candid feedback in a secure and confidential environment. With Whisper, users can effortlessly gather insights from peers without compromising their anonymity. This platform is designed to foster open communication, helping individuals and organizations grow by understanding the perspectives of others.
 
