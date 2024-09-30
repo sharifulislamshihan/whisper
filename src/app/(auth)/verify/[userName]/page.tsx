@@ -71,7 +71,7 @@ const VerifyAccount = ({ }) => {
                     <CardHeader className="text-center">
                         <CardTitle className="text-xl font-semibold">Verify Your Account</CardTitle>
                         <CardDescription className="text-md">Check your email for <span>
-                            verification code</span></CardDescription>
+                            verification code</span><br /><span className="text-sm my-1 text-center text-black">This code will expire in 1 hour</span></CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit(onSubmit)}>

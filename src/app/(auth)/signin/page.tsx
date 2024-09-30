@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 
 
 const SignIn = () => {
+    const [loading, setLoading] = useState(false)
     const { toast } = useToast()
     const router = useRouter()
 
@@ -42,6 +43,7 @@ const SignIn = () => {
 
 
     const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+        setLoading(true)
         const result = await signIn('credentials', {
             redirect: false,
             identifier: data.identifier,
@@ -119,9 +121,12 @@ const SignIn = () => {
                         </div>
                         <div className="mt-5">
                             <Button
+                            disabled = {loading}
                                 type="submit"
                                 className="w-full border border-purple-700 bg-purple-200 hover:bg-purple-300 text-purple-600 font-semibold text-md"
-                            > Sign in
+                            > {
+                                loading ? 'Signing in...' : 'Sign in'
+                            }
                             </Button>
                         </div>
 

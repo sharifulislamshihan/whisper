@@ -100,7 +100,7 @@ export async function sendVerificationEmail(
 
 
         // Send email using Nodemailer
-        transporter.sendMail({
+        await transporter.sendMail({
             from: process.env.EMAIL, // Sender's email address
             to: email, // Recipient's email address
             subject: 'Whisper Verification Code',
