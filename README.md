@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Whisper
 
-## Getting Started
+![Whisper Logo](https://res.cloudinary.com/drdgi9qdu/image/upload/v1727289698/SC7XrUHmR5CIgmQ-XWvE5Q-removebg-preview_rso636.png)
 
-First, run the development server:
+Whisper is an innovative AI-integrated anonymous feedback platform that empowers users to receive candid feedback in a secure and confidential environment. With Whisper, users can effortlessly gather insights from peers without compromising their anonymity. This platform is designed to foster open communication, helping individuals and organizations grow by understanding the perspectives of others.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Table of Contents
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation and Setup](#installation-and-setup)
+- [Contact Information](#contact-information)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
+- **Anonymous Feedback**: Users can share a link to gather feedback anonymously.
+- **AI-Generated Suggestions**: Get insightful suggestions based on the feedback received.
+- **Real-Time Updates**: View feedback submissions and insights as they come in.
+- **User-Friendly Interface**: Designed for ease of use, ensuring a smooth user experience.
+- **Password Management**: Users can change their password if forgotten.
+- **Unique Usernames**: Each user has a unique username to ensure proper identification.
+- **Feedback Submission**: Users can send feedback directly to the platform.
+- **Feedback Management**: Option to switch off Message if users prefer not to receive messages.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Technologies Used
+- **Frontend**: 
+  - Next.js
+  - React.js
+  - TypeScript
+  - Tailwind CSS
+- **Backend**:
+  - Node.js
+  - Express.js
+  - MongoDB
+- **Authentication**:
+  - NextAuth
+- **UI Components**: 
+  - Shadcn
+- **AI Integration**: 
+  - Gemini API
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Installation and Setup
+Follow these steps to set up the Whisper project locally:
 
-## Learn More
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/sharifulislamshihan/whisper.git
+   cd whisper
+   ```
+2. **Install Dependencies**: Make sure you have Node.js installed on your machine. Then run:
+   ```bash
+   npm install
+   ```
+3. **Create Environment Variables**: Create a `.env.local` file in the root directory and add the following environment variables:
+   ```bash
+   MONGODB_URI=your_mongodb_uri
+   NEXTAUTH_SECRET=your_secret_key
+   GEMINI_API_KEY=your_gemini_api_key
+   ```
+4. **Run the Development Server**: Start the application by runnin
+   ```bash
+   npm run dev
+   ```
+5. **Access the Application**: Open your web browser and visit http://localhost:3000 to see Whisper in action!
 
-To learn more about Next.js, take a look at the following resources:
+6. **Build for Production (optional)**: If you wish to build the application for production, run:
+   ```bash
+   npm run build
+   ```
+7. **Start the Production Server:** After building, you can start the production server with:
+   ```bash
+   npm start
+   ```
+## Contact Information
+For any inquiries, feedback, or collaboration opportunities, feel free to reach out:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Email**: [sharifulislamshihan@gmail.com](mailto:sharifulislamshihan@gmail.com)
+- **LinkedIn**: [Shariful Islam Shihan](https://www.linkedin.com/in/shariful-islam-shihan/)
+- **GitHub**: [yourusername](https://github.com/sharifulislamshihan) 

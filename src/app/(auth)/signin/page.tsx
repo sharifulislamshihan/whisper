@@ -14,8 +14,8 @@ import Link from "next/link";
 import { signInSchema } from "@/schemas/signInSchema";
 import { signIn } from "next-auth/react";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
-import RootLayout from "@/app/layout";
+import { useEffect, useState } from "react";
+
 
 const SignIn = () => {
     const { toast } = useToast()
@@ -32,6 +32,13 @@ const SignIn = () => {
 
     // State to manage password visibility
     const [showPassword, setShowPassword] = useState(false);
+
+
+     // for title
+     useEffect(() => {
+        document.title = "SignIn | Whisper";
+    }, []);
+
 
 
     const onSubmit = async (data: z.infer<typeof signInSchema>) => {

@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,12 @@ const ForgetPassword = () => {
     const [loading, setLoading] = useState(false);
     const { toast } = useToast();
     const router = useRouter();
+
+     // for title
+     useEffect(() => {
+        document.title = "Forget Password | Whisper";
+    }, []);
+
 
     const onSubmit = async (data: ForgotPasswordFormData) => {
         setLoading(true);

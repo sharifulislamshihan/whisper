@@ -24,9 +24,9 @@ const Navbar = () => {
     ]
 
     // If the session is loading, return null or a loading indicator
-    if (status === "loading") {
-        return null;
-    }
+    // if (status === "loading") {
+    //     return null;
+    // }
 
 
     return (

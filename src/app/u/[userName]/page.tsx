@@ -17,6 +17,11 @@ const Page = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
 
+    // for title
+    useEffect(() => {
+        document.title = "Anonymous | Whisper";
+    }, []);
+
     useEffect(() => {
         // Get the full pathname
         const path = window.location.pathname; // e.g., /u/[userName]
@@ -111,7 +116,7 @@ const Page = () => {
     return (
         <div>
             <div className="max-w-2xl mx-auto px-4 py-8">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Send Anonymous Message</h1>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Send Anonymous Message to <span className="text-purple-500">{username}</span></h1>
 
                 <Textarea
                     placeholder="Type your message here..."

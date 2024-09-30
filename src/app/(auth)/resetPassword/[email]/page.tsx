@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -43,6 +43,13 @@ const ResetPassword = () => {
 
     // State to manage password visibility CONFIRM PASSWORD
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+
+     // for title
+     useEffect(() => {
+        document.title = "Reset Password | Whisper";
+    }, []);
+
 
 
     const onSubmit = async (data: ResetPasswordFormData) => {
