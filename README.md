@@ -6,10 +6,14 @@
 Whisper is an innovative AI-integrated anonymous feedback platform that empowers users to receive candid feedback in a secure and confidential environment. With Whisper, users can effortlessly gather insights from peers without compromising their anonymity. This platform is designed to foster open communication, helping individuals and organizations grow by understanding the perspectives of others.
 
 ## Table of Contents
+- [Live Link](#live-link)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Installation and Setup](#installation-and-setup)
 - [Contact Information](#contact-information)
+
+## Live Link
+- Visit [Whisper now](https://whisperfeedback.vercel.app/)
 
 ## Features
 - **Anonymous Feedback**: Users can share a link to gather feedback anonymously.
@@ -75,4 +79,4 @@ For any inquiries, feedback, or collaboration opportunities, feel free to reach 
 
 - **Email**: [sharifulislamshihan@gmail.com](mailto:sharifulislamshihan@gmail.com)
 - **LinkedIn**: [Shariful Islam Shihan](https://www.linkedin.com/in/shariful-islam-shihan/)
-- **GitHub**: [yourusername](https://github.com/sharifulislamshihan) 
+- **GitHub**: [sharifulislamshihan](https://github.com/sharifulislamshihan) 
