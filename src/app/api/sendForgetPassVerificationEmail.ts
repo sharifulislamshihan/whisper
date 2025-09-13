@@ -12,6 +12,9 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+//console.log("Email", process.env.EMAIL);
+
+
 // Function to send the verification email
 export async function sendForgetPassVerificationEmail(
     email: string,
